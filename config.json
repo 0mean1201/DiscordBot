@@ -1,7 +1,7 @@
 {
   "since_date": "2026-06-01",
   "include_keywords": [],
-  "exclude_keywords": [],
+  "exclude_keywords": ["메디컬"],
   "sites": [
     {
       "id": "gachon_academic",
