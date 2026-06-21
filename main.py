@@ -23,13 +23,27 @@ def save_seen(seen: dict):
 
 
 def is_filtered(title: str, config: dict) -> bool:
-    """True면 전송 안 함."""
+    """True면 전송 안 함.
+
+    우선순위: include > exclude
+    - include 키워드에 매칭되면 exclude와 무관하게 전송
+    - include 미설정 시 exclude만 적용
+    """
     includes = config.get("include_keywords", [])
     excludes = config.get("exclude_keywords", [])
+
+    # include에 걸리면 무조건 전송 (exclude 무시)
+    if includes and any(kw in title for kw in includes):
+        return False
+
+    # exclude에 걸리면 전송 안 함
     if any(kw in title for kw in excludes):
         return True
-    if includes and not any(kw in title for kw in includes):
+
+    # include가 설정됐는데 아무것도 안 걸리면 전송 안 함
+    if includes:
         return True
+
     return False
 
 
