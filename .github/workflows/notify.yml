@@ -1,0 +1,39 @@
+name: Gachon Notify
+
+on:
+  schedule:
+    # 매일 KST 11:00 = UTC 02:00
+    - cron: "0 2 * * *"
+  workflow_dispatch: # 수동 실행 허용
+
+permissions:
+  contents: write
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run bot
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+        run: python main.py
+
+      - name: Commit updated seen_ids.json
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/seen_ids.json
+          git diff --cached --quiet || git commit -m "chore: update seen_ids [skip ci]"
+          git push
