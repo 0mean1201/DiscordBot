@@ -23,16 +23,20 @@ def fetch():
     soup = BeautifulSoup(resp.text, "html.parser")
     items = []
 
-    for card in soup.select(".program-item, .program-card, li.program"):
-        title_tag = card.select_one("a")
-        if not title_tag:
+    for li in soup.select("ul[data-role='list'] li"):
+        a_tag = li.select_one("a[href]")
+        if not a_tag:
             continue
-        title = title_tag.get_text(strip=True)
-        href = title_tag.get("href", "")
+        href = a_tag.get("href", "")
         if not href:
             continue
         if href.startswith("/"):
             href = "https://wind.gachon.ac.kr" + href
+
+        content = li.select_one("div.content")
+        title = content.get_text(strip=True) if content else a_tag.get_text(strip=True)
+        if not title:
+            continue
 
         if not _is_relevant(title):
             continue
