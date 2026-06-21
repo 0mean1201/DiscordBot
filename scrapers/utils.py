@@ -24,4 +24,4 @@ class LegacySSLAdapter(HTTPAdapter):
 def get(url, params=None):
     session = requests.Session()
     session.mount("https://", LegacySSLAdapter())
-    return session.get(url, params=params, headers=HEADERS, timeout=15, verify=False)
+    return session.get(url, params=params, headers=HEADERS, timeout=15)
