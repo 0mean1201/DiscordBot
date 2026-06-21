@@ -1,18 +1,14 @@
-import requests
 from bs4 import BeautifulSoup
+from .utils import get
 
 BASE_URL = "https://www.gachon.ac.kr/kor/1146/subview.do"
 SOURCE = "장학공지"
 EMOJI = "🎓"
 
-HEADERS = {
-    "User-Agent": "Mozilla/5.0 (compatible; GachonNotifyBot/1.0)"
-}
-
 
 def fetch():
     try:
-        resp = requests.get(BASE_URL, headers=HEADERS, timeout=15)
+        resp = get(BASE_URL)
         resp.raise_for_status()
     except Exception as e:
         print(f"[{SOURCE}] fetch 실패: {e}")
@@ -34,13 +30,6 @@ def fetch():
         date = date_tag.get_text(strip=True) if date_tag else ""
         uid = href
 
-        items.append({
-            "id": uid,
-            "title": title,
-            "url": href,
-            "date": date,
-            "source": SOURCE,
-            "emoji": EMOJI,
-        })
+        items.append({"id": uid, "title": title, "url": href, "date": date, "source": SOURCE, "emoji": EMOJI})
 
     return items

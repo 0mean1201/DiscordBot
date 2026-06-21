@@ -1,16 +1,11 @@
-import requests
 from bs4 import BeautifulSoup
+from .utils import get
 
 BASE_URL = "https://wind.gachon.ac.kr/ko/program/all"
 SOURCE = "비교과"
 EMOJI = "🧩"
 
-# 관련 키워드 필터 — 이 중 하나라도 포함되면 수집
 KEYWORDS = ["AI", "인공지능", "SW", "소프트웨어", "전공", "IT", "데이터", "머신러닝", "딥러닝", "코딩"]
-
-HEADERS = {
-    "User-Agent": "Mozilla/5.0 (compatible; GachonNotifyBot/1.0)"
-}
 
 
 def _is_relevant(title: str) -> bool:
@@ -19,7 +14,7 @@ def _is_relevant(title: str) -> bool:
 
 def fetch():
     try:
-        resp = requests.get(BASE_URL, headers=HEADERS, timeout=15)
+        resp = get(BASE_URL)
         resp.raise_for_status()
     except Exception as e:
         print(f"[{SOURCE}] fetch 실패: {e}")
@@ -43,14 +38,6 @@ def fetch():
             continue
 
         uid = href
-
-        items.append({
-            "id": uid,
-            "title": title,
-            "url": href,
-            "date": "",
-            "source": SOURCE,
-            "emoji": EMOJI,
-        })
+        items.append({"id": uid, "title": title, "url": href, "date": "", "source": SOURCE, "emoji": EMOJI})
 
     return items
