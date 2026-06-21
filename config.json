@@ -45,6 +45,15 @@
       "emoji": "🧩",
       "type": "wind",
       "url": "https://wind.gachon.ac.kr/ko/program/all"
+    },
+    {
+      "id": "gachon_dormitory",
+      "enabled": true,
+      "source": "학생생활관",
+      "emoji": "🏠",
+      "type": "gachon_board",
+      "url": "https://www.gachon.ac.kr/dormitory/2351/subview.do",
+      "params": {}
     }
   ]
 }
