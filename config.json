@@ -1,4 +1,50 @@
 {
+  "since_date": "2026-06-01",
   "include_keywords": [],
-  "exclude_keywords": []
+  "exclude_keywords": [],
+  "sites": [
+    {
+      "id": "gachon_academic",
+      "enabled": true,
+      "source": "학사공지",
+      "emoji": "📌",
+      "type": "gachon_board",
+      "url": "https://www.gachon.ac.kr/kor/3104/subview.do",
+      "params": {"fnctId": "bbs", "fnctNo": "475"}
+    },
+    {
+      "id": "gachon_scholarship",
+      "enabled": true,
+      "source": "장학공지",
+      "emoji": "🎓",
+      "type": "gachon_board",
+      "url": "https://www.gachon.ac.kr/kor/1146/subview.do",
+      "params": {}
+    },
+    {
+      "id": "gachon_aisw",
+      "enabled": true,
+      "source": "AI학과공지",
+      "emoji": "🤖",
+      "type": "gachon_widget",
+      "url": "https://www.gachon.ac.kr/sites/aisw/index.do",
+      "params": {"fnctId": "recentBbs", "fnctNo": "447"}
+    },
+    {
+      "id": "xsw_notice",
+      "enabled": true,
+      "source": "SW중심대학",
+      "emoji": "💻",
+      "type": "wordpress",
+      "url": "https://xsw.gachon.ac.kr/"
+    },
+    {
+      "id": "wind_program",
+      "enabled": true,
+      "source": "비교과",
+      "emoji": "🧩",
+      "type": "wind",
+      "url": "https://wind.gachon.ac.kr/ko/program/all"
+    }
+  ]
 }
