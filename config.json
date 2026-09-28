@@ -8,52 +8,98 @@
       "enabled": true,
       "source": "학사공지",
       "emoji": "📌",
+      "channel": "NOTICE",
       "type": "gachon_board",
       "url": "https://www.gachon.ac.kr/kor/3104/subview.do",
       "params": {"fnctId": "bbs", "fnctNo": "475"}
-    },
-    {
-      "id": "gachon_scholarship",
-      "enabled": true,
-      "source": "장학공지",
-      "emoji": "🎓",
-      "type": "gachon_board",
-      "url": "https://www.gachon.ac.kr/kor/1146/subview.do",
-      "params": {}
     },
     {
       "id": "gachon_aisw",
       "enabled": true,
       "source": "AI학과공지",
       "emoji": "🤖",
+      "channel": "NOTICE",
       "type": "gachon_widget",
       "url": "https://www.gachon.ac.kr/sites/aisw/index.do",
       "params": {"fnctId": "recentBbs", "fnctNo": "447"}
-    },
-    {
-      "id": "xsw_notice",
-      "enabled": true,
-      "source": "SW중심대학",
-      "emoji": "💻",
-      "type": "wordpress",
-      "url": "https://xsw.gachon.ac.kr/"
-    },
-    {
-      "id": "wind_program",
-      "enabled": true,
-      "source": "비교과",
-      "emoji": "🧩",
-      "type": "wind",
-      "url": "https://wind.gachon.ac.kr/ko/program/all"
     },
     {
       "id": "gachon_dormitory",
       "enabled": true,
       "source": "학생생활관",
       "emoji": "🏠",
+      "channel": "DORMITORY",
       "type": "gachon_board",
       "url": "https://www.gachon.ac.kr/dormitory/2351/subview.do",
       "params": {}
+    },
+    {
+      "id": "gachon_student_news",
+      "enabled": true,
+      "source": "학생소식",
+      "emoji": "📰",
+      "channel": "NOTICE",
+      "type": "gachon_board",
+      "url": "https://www.gachon.ac.kr/kor/1147/subview.do",
+      "params": {}
+    },
+    {
+      "id": "gachon_scholarship",
+      "enabled": true,
+      "source": "장학공지",
+      "emoji": "🎓",
+      "channel": "SCHOLARSHIP",
+      "type": "gachon_board",
+      "url": "https://www.gachon.ac.kr/kor/1146/subview.do",
+      "params": {}
+    },
+    {
+      "id": "gachon_job",
+      "enabled": true,
+      "source": "취업공지",
+      "emoji": "💼",
+      "channel": "JOB",
+      "type": "gachon_board",
+      "url": "https://www.gachon.ac.kr/kor/1148/subview.do",
+      "params": {}
+    },
+    {
+      "id": "wind_program",
+      "enabled": true,
+      "source": "비교과",
+      "emoji": "🧩",
+      "channel": "EXTRACURRICULAR",
+      "type": "wind",
+      "url": "https://wind.gachon.ac.kr/ko/program/all"
+    },
+    {
+      "id": "gachon_extracurricular",
+      "enabled": true,
+      "source": "비교과공지",
+      "emoji": "🧩",
+      "channel": "EXTRACURRICULAR",
+      "type": "gachon_board",
+      "url": "https://www.gachon.ac.kr/kor/7943/subview.do",
+      "params": {}
+    },
+    {
+      "id": "gachon_etc",
+      "enabled": true,
+      "source": "기타공지",
+      "emoji": "📎",
+      "channel": "ETC",
+      "type": "gachon_board",
+      "url": "https://www.gachon.ac.kr/kor/4006/subview.do",
+      "params": {}
+    },
+    {
+      "id": "xsw_notice",
+      "enabled": true,
+      "source": "SW중심대학",
+      "emoji": "💻",
+      "channel": "ETC",
+      "type": "wordpress",
+      "url": "https://xsw.gachon.ac.kr/"
     }
   ]
 }

@@ -9,7 +9,6 @@ from scrapers import generic
 
 SEEN_IDS_PATH = Path(__file__).parent / "data" / "seen_ids.json"
 CONFIG_PATH = Path(__file__).parent / "config.json"
-DISCORD_WEBHOOK_URL = os.environ.get("DISCORD_WEBHOOK_URL", "")
 
 
 def load_json(path: Path) -> dict:
@@ -22,48 +21,43 @@ def save_seen(seen: dict):
     SEEN_IDS_PATH.write_text(json.dumps(seen, ensure_ascii=False, indent=2), encoding="utf-8")
 
 
-def is_filtered(title: str, config: dict) -> bool:
-    """True면 전송 안 함.
+def get_webhook_url(channel: str) -> str:
+    """채널명에 해당하는 Webhook URL 반환. 없으면 기본 URL로 폴백."""
+    url = os.environ.get(f"DISCORD_WEBHOOK_{channel}", "")
+    if not url:
+        url = os.environ.get("DISCORD_WEBHOOK_URL", "")
+    return url
 
-    우선순위: include > exclude
-    - include 키워드에 매칭되면 exclude와 무관하게 전송
-    - include 미설정 시 exclude만 적용
-    """
+
+def is_filtered(title: str, config: dict) -> bool:
+    """True면 전송 안 함. 우선순위: include > exclude"""
     includes = config.get("include_keywords", [])
     excludes = config.get("exclude_keywords", [])
 
-    # include에 걸리면 무조건 전송 (exclude 무시)
     if includes and any(kw in title for kw in includes):
         return False
-
-    # exclude에 걸리면 전송 안 함
     if any(kw in title for kw in excludes):
         return True
-
-    # include가 설정됐는데 아무것도 안 걸리면 전송 안 함
     if includes:
         return True
-
     return False
 
 
 def is_before_since(item_date: str, since: date | None) -> bool:
-    """기준일보다 오래된 글이면 True."""
     if not since or not item_date:
         return False
     try:
-        # gachon 날짜 형식: YYYY.MM.DD 또는 YYYY-MM-DD
-        normalized = item_date.replace(".", "-")
-        return date.fromisoformat(normalized) < since
+        return date.fromisoformat(item_date.replace(".", "-")) < since
     except ValueError:
         return False
 
 
-def send_discord(message: str):
-    if not DISCORD_WEBHOOK_URL:
-        print("[경고] DISCORD_WEBHOOK_URL 환경변수가 없습니다.")
+def send_discord(message: str, channel: str):
+    url = get_webhook_url(channel)
+    if not url:
+        print(f"[경고] {channel} 채널의 Webhook URL이 없습니다.")
         return
-    resp = requests.post(DISCORD_WEBHOOK_URL, json={"content": message}, timeout=10)
+    resp = requests.post(url, json={"content": message}, timeout=10)
     if not resp.ok:
         print(f"[Discord] 전송 실패: {resp.status_code} {resp.text}")
 
@@ -74,7 +68,6 @@ def main():
 
     since_str = config.get("since_date", "")
     since = date.fromisoformat(since_str) if since_str else None
-
     enabled_sites = [s for s in config.get("sites", []) if s.get("enabled", True)]
 
     print(f"[설정] 기준일: {since or '없음'}")
@@ -87,6 +80,7 @@ def main():
     for site in enabled_sites:
         items = generic.fetch(site)
         source = site["source"]
+        channel = site.get("channel", "NOTICE")
         seen_set = set(seen.get(source, []))
         new_items = [item for item in items if item["id"] not in seen_set]
 
@@ -102,8 +96,8 @@ def main():
                 continue
 
             message = f"{item['emoji']} **[{item['source']}]** {item['title']}\n{item['url']}"
-            print(f"[전송] {message}")
-            send_discord(message)
+            print(f"[전송→{channel}] {message}")
+            send_discord(message, channel)
             new_count += 1
 
         seen[source] = list(seen_set)

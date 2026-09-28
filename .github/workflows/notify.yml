@@ -27,6 +27,12 @@ jobs:
 
       - name: Run bot
         env:
+          DISCORD_WEBHOOK_NOTICE: ${{ secrets.DISCORD_WEBHOOK_NOTICE }}
+          DISCORD_WEBHOOK_EXTRACURRICULAR: ${{ secrets.DISCORD_WEBHOOK_EXTRACURRICULAR }}
+          DISCORD_WEBHOOK_SCHOLARSHIP: ${{ secrets.DISCORD_WEBHOOK_SCHOLARSHIP }}
+          DISCORD_WEBHOOK_JOB: ${{ secrets.DISCORD_WEBHOOK_JOB }}
+          DISCORD_WEBHOOK_DORMITORY: ${{ secrets.DISCORD_WEBHOOK_DORMITORY }}
+          DISCORD_WEBHOOK_ETC: ${{ secrets.DISCORD_WEBHOOK_ETC }}
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
         run: python main.py
 
