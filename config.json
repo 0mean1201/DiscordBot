@@ -93,13 +93,13 @@
       "params": {}
     },
     {
-      "id": "xsw_notice",
+      "id": "ai_center_notice",
       "enabled": true,
-      "source": "SW중심대학",
+      "source": "AI중심대학",
       "emoji": "💻",
       "channel": "ETC",
-      "type": "wordpress",
-      "url": "https://xsw.gachon.ac.kr/"
+      "type": "imweb_board",
+      "url": "https://ai.gachon.ac.kr/47"
     }
   ]
 }

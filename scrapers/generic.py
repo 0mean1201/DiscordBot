@@ -5,9 +5,11 @@ config.json의 sites 항목을 받아 아이템 리스트를 반환한다.
 지원 타입:
   gachon_board  - gachon.ac.kr 표준 게시판 (table.board-table)
   gachon_widget - gachon.ac.kr 학과 사이트 최근글 위젯
-  wordpress     - 워드프레스 기반 사이트
+  imweb_board   - 아임웹 기반 게시판 (ai.gachon.ac.kr 등)
   wind          - wind.gachon.ac.kr 비교과 프로그램
 """
+
+import re
 
 from bs4 import BeautifulSoup
 from .utils import get
@@ -72,7 +74,7 @@ def fetch_gachon_widget(site: dict) -> list:
     return items
 
 
-def fetch_wordpress(site: dict) -> list:
+def fetch_imweb_board(site: dict) -> list:
     try:
         resp = get(site["url"])
         resp.raise_for_status()
@@ -82,12 +84,18 @@ def fetch_wordpress(site: dict) -> list:
 
     soup = BeautifulSoup(resp.text, "html.parser")
     items = []
-    for a_tag in soup.select("article h2 a, .entry-title a, .post-title a"):
-        title = a_tag.get_text(strip=True)
-        href = a_tag.get("href", "")
-        if not href:
+    for row in soup.select("span.post_link_wrap"):
+        a_tag = row.select_one("li.tit a.title_link")
+        idx = re.search(r"idx=(\d+)", a_tag.get("href", "")) if a_tag else None
+        if not idx:
             continue
-        items.append(_make_item(site, title, href))
+        title_tag = a_tag.find("span", recursive=False)
+        title = title_tag.get_text(strip=True) if title_tag else a_tag.get_text(strip=True)
+        # 목록 링크에 붙는 q= 파라미터는 검색 상태라서 빼고, 글 번호(idx)로만 URL을 만든다
+        href = f"{site['url'].rstrip('/')}/?bmode=view&idx={idx.group(1)}&t=board"
+        date_tag = row.select_one("li.time")
+        date = date_tag.get_text(strip=True) if date_tag else ""
+        items.append(_make_item(site, title, href, date))
     return items
 
 
@@ -121,7 +129,7 @@ def fetch_wind(site: dict) -> list:
 FETCHERS = {
     "gachon_board": fetch_gachon_board,
     "gachon_widget": fetch_gachon_widget,
-    "wordpress": fetch_wordpress,
+    "imweb_board": fetch_imweb_board,
     "wind": fetch_wind,
 }
 
